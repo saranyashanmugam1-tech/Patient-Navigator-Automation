@@ -1,0 +1,27 @@
+Test this site from your internal browser completely
+https://rpa.icarebuddy.com/OrderStatus/ceffdea6-feb5-4cd3-80a5-cc1b7d7da171
+ 
+Write me the complete test case with the status. Test case should have following columns,
+ 
+Case Id,
+Scenario
+ 
+Steps to produce
+ 
+Expected Output
+Actual Output
+ 
+Status
+ 
+Comments - This is if you have any recommendation to fix.
+ 
+Testing should cover, design issues, responsive, security, mobile view, functionality.
+ 
+For your testing use these details,
+Firstname - Jai
+LastName - K
+Phone number - 2798889291
+ 
+For MFA - You can use current date time in format this for the current time 17th sep 1.40 then the code will be 171340
+ 
+If you have any confusion or doubts do not assume yourself ask me the question and get my answer then proceed
