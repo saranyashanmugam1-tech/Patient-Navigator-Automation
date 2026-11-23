@@ -1,0 +1,62 @@
+name: Playwright Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      # The login page is protected by a visible reCAPTCHA, so CI cannot sign
+      # in itself (see README "Authentication & reCAPTCHA"). Instead, each
+      # role's storageState (captured locally with `npm run auth:setup`) is
+      # base64-encoded and stored as a repo secret, then restored here.
+      # Skip a role by leaving its secret unset.
+      - name: Restore captured login sessions
+        run: |
+          mkdir -p auth
+          [ -n "${{ secrets.PLAYWRIGHT_AUTH_SYSADMIN }}" ] && echo "${{ secrets.PLAYWRIGHT_AUTH_SYSADMIN }}" | base64 -d > auth/sysadmin.json || true
+          [ -n "${{ secrets.PLAYWRIGHT_AUTH_APPADMIN }}" ] && echo "${{ secrets.PLAYWRIGHT_AUTH_APPADMIN }}" | base64 -d > auth/appadmin.json || true
+          [ -n "${{ secrets.PLAYWRIGHT_AUTH_ADMIN }}" ] && echo "${{ secrets.PLAYWRIGHT_AUTH_ADMIN }}" | base64 -d > auth/admin.json || true
+          [ -n "${{ secrets.PLAYWRIGHT_AUTH_EMPLOYEE }}" ] && echo "${{ secrets.PLAYWRIGHT_AUTH_EMPLOYEE }}" | base64 -d > auth/employee.json || true
+
+      - name: Run Playwright tests
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          EXISTING_USER_EMAIL: ${{ secrets.EXISTING_USER_EMAIL }}
+          EXISTING_SYSADMIN_EMAIL: ${{ secrets.EXISTING_SYSADMIN_EMAIL }}
+        run: npx playwright test
+
+      - name: Share HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Share JUnit results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-results
+          path: reports/junit.xml
+          retention-days: 30

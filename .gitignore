@@ -1,0 +1,17 @@
+node_modules/
+
+# Secrets — never commit real credentials
+.env
+
+# Captured login sessions (contain live session cookies) — see README "Authentication & reCAPTCHA"
+auth/*.json
+!auth/.gitkeep
+
+# Playwright output
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+reports/
+
+*.log

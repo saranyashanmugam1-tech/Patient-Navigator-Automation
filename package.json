@@ -1,0 +1,27 @@
+{
+  "name": "icarebuddy-user-registration-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright E2E automation for the User Registration module (Administration → Users) of the Eyefinity Encompass admin portal at connect-st-admin.icarebuddy.com",
+  "scripts": {
+    "install:browsers": "playwright install --with-deps chromium",
+    "auth:setup": "tsx scripts/setup-auth.ts",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:sysadmin": "playwright test --project=sysadmin",
+    "test:appadmin": "playwright test --project=appadmin",
+    "test:admin": "playwright test --project=admin",
+    "test:employee": "playwright test --project=employee",
+    "test:cross-role": "playwright test --project=cross-role",
+    "test:validation": "playwright test --project=validation",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^22.10.5",
+    "dotenv": "^16.4.7",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
